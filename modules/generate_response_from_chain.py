@@ -9,10 +9,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 # AIの返答を作成
-def response_generator():
-    # モデルを準備
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
-    
+def gemini_rag_generator():    
     # # チャット履歴の形に変換
     # history = []
     # for chat_data in st.session_state.messages[:-1]:
@@ -23,6 +20,10 @@ def response_generator():
     
     # 返答を作成
     try:
+        # モデルを準備
+        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
+    
+        # 直前のユーザの入力を取得し、レスポンスを得る
         user_input = st.session_state.messages[-1]["content"]
         response = llm.invoke(user_input).content
         
