@@ -49,7 +49,8 @@ HIDE_ST_STYLE = """
 HIDE_IMG_FS = """
 <style>
     button[title="View fullscreen"]{
-        visibility: hidden;}
+        visibility: hidden;
+    }
 </style>
 """
 
