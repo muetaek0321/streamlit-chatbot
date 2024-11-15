@@ -163,3 +163,5 @@ cython_debug/
 
 # add
 chat_history.json
+chroma/
+pretrained/

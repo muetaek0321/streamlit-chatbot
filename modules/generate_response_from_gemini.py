@@ -1,5 +1,6 @@
 import os
 import time
+import traceback
 
 import streamlit as st
 from markdown import Markdown
@@ -35,9 +36,9 @@ def gemini_generator():
         
         # 返答を成形（makrddown -> HTML）
         response = Markdown().convert(response)
-    except Exception as e:
+    except Exception:
         # API側のエラーをキャッチして表示する
-        response = f"<span style=\"color:#ff0000;\">{e}</span>"
+        response = f"<span style=\"color:#ff0000;\">{traceback.format_exc()}</span>"
     
     for word in response.split():
         yield word + " "
