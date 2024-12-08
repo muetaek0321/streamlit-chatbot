@@ -6,6 +6,7 @@ from PIL import Image
 
 from modules.styles import HIDE_ST_STYLE, HIDE_IMG_FS
 from modules.widgets import *
+from modules.st_utiles import *
 from modules.generate_response_from_gemini import gemini_generator
 from modules.generate_response_from_chain import gemini_rag_generator
 
@@ -110,15 +111,11 @@ if st.session_state.current_role == "assistant":
         st.session_state.messages.append({"role": "assistant", "content": response})
         # ユーザの入力待ち状態に切り替え
         st.session_state.current_role = "user"
-        
-        # TODO: タイトル生成機能を作成
-        ## とりあえず最初のユーザの入力の頭の内容を取得するのみにする
-        if len(st.session_state.messages) == 2:
-            title_str = st.session_state.messages[0]["content"][:10]
-            st.session_state.chats[st.session_state.current_chat]["title"] = title_str
-            st.session_state.chat_title = title_str
 
 # 履歴の保存
 with open(JSON_PATH, mode="w", encoding="utf-8") as f:
         json.dump(st.session_state.chats, f, indent=2)
-    
+
+# 初回はタイトル生成
+if len(st.session_state.messages) == 2:
+    create_chat_title()
