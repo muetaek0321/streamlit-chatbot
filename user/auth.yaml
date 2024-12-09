@@ -1,0 +1,14 @@
+cookie:
+  expiry_days: 1
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    guest:
+      email: ''
+      name: guest
+      password: $2b$12$hfc.ITE5WLxzkpto5g/I3.3vQM5VzBgW15txr8p1CiH5JCami4Sqq
+    test:
+      email: ''
+      name: test
+      password: $2b$12$z97oLLyJ9TEVjvAaT9eg0OEnJyXSdwWDeuFxiFqnLZSAnKLZc6t8q

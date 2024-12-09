@@ -1,9 +1,14 @@
 streamlit
 google-generativeai
 markdown
+
+# RAGを使用する場合
 langchain
 langchain_community
 langchain_google_genai
 sentence-transformers
 unstructured
 chromadb
+
+# 簡易的な認証機能を使用する場合
+streamlit-authenticator
