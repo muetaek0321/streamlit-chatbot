@@ -83,7 +83,7 @@ with st.sidebar:
                     
             with col2:
                 if st.button("", icon=":material/delete:", use_container_width=True, key=f"chat{chat_num+1}_del"):
-                    delete_chat_dialog(chat_num, USER_JSON_PATH)
+                    delete_chat_dialog(chat_num)
 
 # タイトルを設定   
 st.title(st.session_state.chat_title)
@@ -125,5 +125,5 @@ with open(USER_JSON_PATH, mode="w", encoding="utf-8") as f:
         json.dump(st.session_state.chats, f, indent=2)
 
 # 初回はタイトル生成
-if len(st.session_state.messages) == 2:
+if (st.session_state.chat_title == "new chat") and (len(st.session_state.messages) == 2):
     create_chat_title()

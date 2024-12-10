@@ -22,6 +22,8 @@ if "authentication_status" in st.session_state:
     del st.session_state.authentication_status
 if "messages" in st.session_state:
     del st.session_state.messages
+    del st.session_state.chats
+    
 
 # スタイルを適用
 st.markdown(HIDE_ST_STYLE, unsafe_allow_html=True)
