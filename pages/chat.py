@@ -5,7 +5,7 @@ import streamlit as st
 from PIL import Image
 
 from modules.styles import HIDE_ST_STYLE, HIDE_IMG_FS
-from modules.widgets import delete_chat_dialog
+from modules.widgets import delete_chat_dialog, logout_dialog
 from modules.st_utiles import *
 from modules.generate_response_from_gemini import gemini_generator
 from modules.generate_response_from_chain import gemini_rag_generator
@@ -65,7 +65,7 @@ with st.sidebar:
     st.divider() # 区切り線
 
     # チャットを追加するボタン
-    if st.button("新しいチャット", use_container_width=True, type='primary'):
+    if st.button("新しいチャット", icon=":material/chat_bubble:", use_container_width=True):
         st.session_state.chats.append({"title": "new chat", "messages": []})
         st.session_state.chat_title = st.session_state.chats[-1]["title"]
         st.session_state.messages = st.session_state.chats[-1]["messages"]
@@ -84,6 +84,10 @@ with st.sidebar:
             with col2:
                 if st.button("", icon=":material/delete:", use_container_width=True, key=f"chat{chat_num+1}_del"):
                     delete_chat_dialog(chat_num)
+    
+    st.divider() # 区切り線          
+    if st.button("ログアウト", use_container_width=True, type='primary'):
+        logout_dialog()
 
 # タイトルを設定   
 st.title(st.session_state.chat_title)

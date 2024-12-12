@@ -1,7 +1,20 @@
+from pathlib import Path
+
 import streamlit as st
+import yaml
+from streamlit_authenticator.controllers import AuthenticationController
 
 
 __all__ = ["delete_chat_dialog", "error_dialog", "complate_signup_alert"]
+
+# 定数
+AUTH_DIR_PATH = Path("./user")
+AUTH_FILE_PATH = AUTH_DIR_PATH.joinpath("auth.yaml")
+
+with open(AUTH_FILE_PATH, mode="r") as f:
+    auth = yaml.safe_load(f)
+
+auth_controller = AuthenticationController(auth['credentials'])
 
 
 @st.dialog("チャット削除")
@@ -43,3 +56,32 @@ def complate_signup_alert() -> None:
     with col2:
         if st.button("OK", use_container_width=True):
             st.switch_page("./main.py")
+
+
+def login_button(username: str, password: str) -> None:
+    """ログインのボタン
+    """
+    if st.button("ログイン", use_container_width=True, type='primary'):
+        auth_ok = auth_controller.login(username, password)
+        # ログイン成功
+        if auth_ok:
+            st.switch_page("./pages/chat.py")
+        # ログイン失敗
+        else:
+            error_dialog("ユーザ名またはパスワードが間違っています。")
+ 
+            
+@st.dialog("ログアウト")
+def logout_dialog() -> None:
+    """ログアウトの確認ダイアログ
+    """
+    st.write("ログアウトしますか？")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("OK", use_container_width=True):
+            auth_controller.logout()
+            st.switch_page("./main.py")
+    with col2:
+        if st.button("キャンセル", use_container_width=True):
+            st.rerun()
+
