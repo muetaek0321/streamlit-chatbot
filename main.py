@@ -21,8 +21,10 @@ st.title("素晴らしいチャットボット")
 
 st.write("チャットを開始する！")
 with st.container(border=True):
-    username = st.text_input("ユーザー名：")
-    password = st.text_input("パスワード：", type='password')
+    st.markdown(f"ユーザー名：")
+    username = st.text_input(" ", label_visibility="collapsed", key="username_login")
+    st.markdown(f"パスワード：")
+    password = st.text_input(" ", type='password', label_visibility="collapsed", key="password_login")
 
     # ログインボタン
     login_button(username, password)

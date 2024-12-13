@@ -14,15 +14,19 @@ st.markdown(HIDE_ST_STYLE, unsafe_allow_html=True)
 # 定数
 AUTH_DIR_PATH = Path("./user")
 AUTH_FILE_PATH = AUTH_DIR_PATH.joinpath("auth.yaml")
+REQUIRED_MARK = "<span style='color: red'>*</span>"
 
 st.title("新規ユーザ登録")
 
 st.write("ユーザ名とパスワードを入力してください。")
 
 with st.container(border=True):
-    username = st.text_input("ユーザー名：")
-    password = st.text_input("パスワード：", type='password')
-    email = st.text_input("メールアドレス：")
+    st.markdown(f"ユーザー名{REQUIRED_MARK}：", unsafe_allow_html=True)
+    username = st.text_input(" ", label_visibility="collapsed", key="username_signup")
+    st.markdown(f"パスワード{REQUIRED_MARK}：", unsafe_allow_html=True)
+    password = st.text_input(" ", type='password', label_visibility="collapsed", key="password_signup")
+    st.markdown(f"メールアドレス：", unsafe_allow_html=True)
+    email = st.text_input(" ", label_visibility="collapsed", key="email")
 
     col1, col2 = st.columns(2)
     with col1:
@@ -35,7 +39,10 @@ with st.container(border=True):
                 if yaml_data["credentials"]["usernames"] is None:
                     yaml_data["credentials"]["usernames"] = dict()
             
-            if username in yaml_data["credentials"]["usernames"].keys():
+            if (username == "") or (password == ""):
+                # ユーザ名orパスワードの入力欄が空欄の場合
+                error_dialog("ユーザ名およびパスワードの入力は必須です。")
+            elif username in yaml_data["credentials"]["usernames"].keys():
                 # 既に登録済みのユーザ名の場合
                 error_dialog("登録済みのユーザ名と重複しています。<br>別のユーザ名で登録してください。")
             else:
