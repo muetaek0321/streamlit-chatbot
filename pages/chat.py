@@ -81,7 +81,7 @@ with st.sidebar:
             col1, col2 = st.columns([3, 1])
             with col1:
                 chat_data = st.session_state.chats[chat_num]
-                if st.button(chat_data["title"], use_container_width=True, key=f"chat{chat_num+1}"):
+                if st.button(f"{chat_data['title'][:8]}…", use_container_width=True, key=f"chat{chat_num+1}"):
                     st.session_state.current_chat = chat_num
                     st.session_state.chat_title = chat_data["title"]
                     st.session_state.messages = chat_data["messages"]
@@ -93,9 +93,6 @@ with st.sidebar:
     st.divider() # 区切り線          
     if st.button("ログアウト", use_container_width=True, type='primary'):
         logout_dialog()
-
-# タイトルを設定   
-st.title(st.session_state.chat_title)
 
 # 対話内容の表示
 for message in st.session_state.messages:
