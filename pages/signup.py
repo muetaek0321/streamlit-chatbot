@@ -61,6 +61,8 @@ with st.container(border=True):
                 # ユーザ専用の履歴フォルダを作成
                 user_dir = AUTH_DIR_PATH.joinpath(username)
                 user_dir.mkdir(exist_ok=True)
+                # gitkeepを作成
+                user_dir.joinpath(".gitkeep").touch()
                     
                 # トップ画面に戻る
                 complate_signup_alert()

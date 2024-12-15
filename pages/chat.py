@@ -28,7 +28,12 @@ if "authentication_status" not in st.session_state:
     st.switch_page("./main.py")
 
 ## ユーザごとチャット履歴のパス
-USER_JSON_PATH = AUTH_DIR_PATH.joinpath(st.session_state.username, JSON_FILE_NAME)
+USER_DIR_PATH = AUTH_DIR_PATH.joinpath(st.session_state.username)
+if not USER_DIR_PATH.is_dir():
+    # 何らかの問題でユーザフォルダが無い場合に新規作成
+    USER_DIR_PATH.mkdir(parents=True, exist_ok=True)
+    USER_DIR_PATH.joinpath(".gitkeep").touch()
+USER_JSON_PATH = USER_DIR_PATH.joinpath(JSON_FILE_NAME)
 
 # 初回の処理
 if "messages" not in st.session_state:    
