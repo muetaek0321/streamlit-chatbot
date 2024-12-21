@@ -126,10 +126,11 @@ if st.session_state.current_role == "assistant":
         # ユーザの入力待ち状態に切り替え
         st.session_state.current_role = "user"
 
-# 履歴の保存
-with open(USER_JSON_PATH, mode="w", encoding="utf-8") as f:
-        json.dump(st.session_state.chats, f, indent=2)
-
 # 初回はタイトル生成
 if (st.session_state.chat_title == "new chat") and (len(st.session_state.messages) == 2):
     create_chat_title()
+
+# 履歴の保存
+with open(USER_JSON_PATH, mode="w", encoding="utf-8") as f:
+        json.dump(st.session_state.chats, f, indent=2)
+        

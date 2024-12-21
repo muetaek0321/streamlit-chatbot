@@ -8,6 +8,10 @@ credentials:
       email: ''
       name: guest
       password: $2b$12$hfc.ITE5WLxzkpto5g/I3.3vQM5VzBgW15txr8p1CiH5JCami4Sqq
+    hiroji:
+      email: null
+      name: hiroji
+      password: $2b$12$58jEsYHPeHjtFwdks1Lx6O9t82BO4QV6QSAirEB5PTdUd48vuN8Te
     test:
       email: ''
       name: test
