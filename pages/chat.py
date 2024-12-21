@@ -6,7 +6,7 @@ from PIL import Image
 
 from modules.styles import HIDE_ST_STYLE, HIDE_IMG_FS
 from modules.widgets import delete_chat_dialog, logout_dialog
-from modules.st_utiles import *
+from modules.st_utils import *
 from modules.generate_response_from_gemini import gemini_generator
 from modules.generate_response_from_chain import gemini_rag_generator
 
