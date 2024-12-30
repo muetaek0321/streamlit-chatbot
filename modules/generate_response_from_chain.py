@@ -24,7 +24,7 @@ DB_PATH = "./rag/chroma"
 # AIの返答を作成
 def gemini_rag_generator():        
     # モデルを準備
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
+    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-thinking-exp")
     # プロンプトを設定
     prompt = PromptTemplate.from_template(TEMPLATE)
     # チェーンを準備
@@ -47,7 +47,7 @@ def gemini_rag_generator():
     response = rag_chain.invoke({"question": user_input, "context": context}).content
     
     # 返答を成形（makrddown -> HTML）
-    response = Markdown().convert(response)
+    response = Markdown().convert(response[1])
     
     for word in response.split():
         yield word + " "
