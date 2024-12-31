@@ -1,3 +1,7 @@
 ・GeminiAPIモデル一覧の確認
 https://ai.google.dev/api/models?hl=ja
 
+・RAG
+　・RAGで履歴管理
+　https://zenn.dev/khisa/articles/1f368c79570b17
+　https://qiita.com/ksonoda/items/b243dbfcfe18548ce98c
