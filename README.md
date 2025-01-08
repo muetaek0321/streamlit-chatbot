@@ -1,2 +1,2 @@
 # streamlit-chatbot
-Streamlitで作成してチャットボットアプリ
+Streamlitで作成したチャットボットアプリ

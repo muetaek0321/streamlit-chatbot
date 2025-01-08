@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+streamlit = "*"
+google-generativeai = "*"
+markdown = "*"
+langchain = "*"
+langchain-community = "*"
+langchain-google-genai = "*"
+sentence-transformers = "*"
+unstructured = "*"
+chromadb = "*"
+streamlit-authenticator = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
