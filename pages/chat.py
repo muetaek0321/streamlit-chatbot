@@ -7,8 +7,9 @@ from PIL import Image
 from modules.styles import HIDE_ST_STYLE, HIDE_IMG_FS
 from modules.widgets import delete_chat_dialog, logout_dialog
 from modules.st_utils import *
-from modules.generate_response_from_gemini import gemini_generator
-from modules.generate_response_from_chain import gemini_rag_generator
+from modules.number_links import response_add_info
+from modules.generate_response_from_gemini_api import gemini_generator
+from modules.generate_response_from_gemini_rag import gemini_rag_generator
 
 
 # 定数
@@ -59,7 +60,7 @@ if "messages" not in st.session_state:
 # チャット一覧を表示するサイドバー
 with st.sidebar:
     # ロゴの表示
-    logo_img = Image.open("./src/chatbot_logo.png")
+    logo_img = Image.open("./data/chatbot_logo.png")
     st.image(logo_img)
     
     st.divider() # 区切り線
@@ -120,9 +121,13 @@ if st.session_state.current_role == "assistant":
         for res in GENERATOR[st.session_state.respose_mode]():
             response += res
             res_container.markdown(response, unsafe_allow_html=True)
+            
+        # 追加情報を付与
+        add_info_text = response_add_info(response)
     
         # AIの返答を履歴に保存
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        st.session_state.messages.append({"role": "assistant", "content": response+add_info_text})
+        
         # ユーザの入力待ち状態に切り替え
         st.session_state.current_role = "user"
 

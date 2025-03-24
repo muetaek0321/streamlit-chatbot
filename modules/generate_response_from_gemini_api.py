@@ -19,7 +19,10 @@ def gemini_generator():
         # APIキーを設定
         genai.configure(api_key=GEMINI_API_KEY)
         # モデルを準備
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        model = genai.GenerativeModel(
+            model_name='gemini-2.0-flash-exp',
+            system_instruction="あなたはエレファントカシマシについて答えるアシスタントです。"
+        )
         
         # チャット履歴の形に変換
         history = []

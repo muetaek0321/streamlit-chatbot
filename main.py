@@ -1,10 +1,14 @@
 from pathlib import Path
 
 import streamlit as st
+from dotenv import load_dotenv
 
 from modules.styles import HIDE_ST_STYLE
 from modules.widgets import login_button
 
+
+# 環境変数設定
+load_dotenv()
 
 # 認証情報がある場合はリセット
 if "authentication_status" in st.session_state:
