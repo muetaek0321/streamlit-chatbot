@@ -3,6 +3,7 @@ from pathlib import Path
 
 import streamlit as st
 from PIL import Image
+import torch
 
 from modules.styles import HIDE_ST_STYLE, HIDE_IMG_FS
 from modules.widgets import delete_chat_dialog, logout_dialog
@@ -10,15 +11,12 @@ from modules.st_utils import *
 from modules.number_links import response_add_info
 from modules.generate_response_from_gemini_api import gemini_generator
 from modules.generate_response_from_gemini_rag import gemini_rag_generator
+from modules.generate_response_from_gemma2_baku import gemma2_baku_generator
 
 
 # 定数
 AUTH_DIR_PATH = Path("./user")
 JSON_FILE_NAME = "chat_history.json"
-GENERATOR = {
-    "Gemini": gemini_generator, 
-    "Gemini_RAG": gemini_rag_generator
-}
 
 # スタイルを適用
 st.markdown(HIDE_ST_STYLE, unsafe_allow_html=True)
@@ -37,7 +35,7 @@ if not USER_DIR_PATH.is_dir():
 USER_JSON_PATH = USER_DIR_PATH.joinpath(JSON_FILE_NAME)
 
 # 初回の処理
-if "messages" not in st.session_state:    
+if "messages" not in st.session_state:
     if USER_JSON_PATH.is_file():
         with open(USER_JSON_PATH, mode="r", encoding="utf-8") as f:
             st.session_state.chats = json.load(f)
@@ -54,6 +52,20 @@ if "messages" not in st.session_state:
     # 初回はユーザの入力待ち状態に設定
     st.session_state.current_role = "user"
     
+    # 返答生成モジュールの設定
+    st.session_state.mode_select = ["Gemini", "Gemini_RAG"]
+    st.session_state.generator = {
+        "Gemini": gemini_generator, 
+        "Gemini_RAG": gemini_rag_generator
+    }
+    if torch.cuda.is_available():
+        # GPU環境でCUDAが使用できる場合
+        st.session_state.mode_select += ["Gemma2_baku"]
+        generator_cuda = {
+            "Gemma2_baku": gemma2_baku_generator
+        }
+        st.session_state.generator = st.session_state.generator | generator_cuda
+        
     # responseモードの指定（初回はGemini対話モード）
     st.session_state.respose_mode = "Gemini"
     
@@ -66,7 +78,7 @@ with st.sidebar:
     st.divider() # 区切り線
     
     # レスポンスを返す関数を指定するプルダウン
-    st.session_state.respose_mode = st.selectbox("チャットモード選択：", ["Gemini", "Gemini_RAG"])
+    st.session_state.respose_mode = st.selectbox("チャットモード選択：", st.session_state.mode_select)
     
     st.divider() # 区切り線
 
@@ -118,7 +130,7 @@ if st.session_state.current_role == "assistant":
         res_container = st.empty()
         
         # 選択中のチャットモードによって返答するresponse_generatorを切り替え
-        for res in GENERATOR[st.session_state.respose_mode]():
+        for res in st.session_state.generator[st.session_state.respose_mode]():
             response += res
             res_container.markdown(response, unsafe_allow_html=True)
             
