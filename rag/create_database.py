@@ -1,10 +1,10 @@
 import os
-os.environ["HF_HOME"] = "./pretrained" # 事前学習モデルの保存先指定
+os.environ["HF_HOME"] = "../pretrained" # 事前学習モデルの保存先指定
 
 from langchain_community.document_loaders import UnstructuredURLLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 

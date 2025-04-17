@@ -1,12 +1,12 @@
 import time
 import os
-os.environ["HF_HOME"] = "./rag/pretrained" # 事前学習モデルの保存先指定
+os.environ["HF_HOME"] = "./pretrained" # 事前学習モデルの保存先指定
 
 import streamlit as st
 from markdown import Markdown
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
-from langchain.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain.embeddings import HuggingFaceEmbeddings
 
 
@@ -62,7 +62,7 @@ def gemini_rag_generator():
     }).content
     
     # 返答を成形（makrddown -> HTML）
-    response = Markdown().convert(response[1])
+    response = Markdown().convert(response)
     
     for word in response.split():
         yield word + " "
