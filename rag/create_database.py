@@ -1,4 +1,5 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["HF_HOME"] = "../pretrained" # 事前学習モデルの保存先指定
 
 from langchain_community.document_loaders import UnstructuredURLLoader
@@ -39,8 +40,10 @@ def main() -> None:
     docs = text_splitter.split_documents(docs)
     
     # ベクトル化する準備
+    model_kwargs = {"device": "cuda", "trust_remote_code": True}
     embedding = HuggingFaceEmbeddings(
-        model_name="intfloat/multilingual-e5-base"
+        model_name="pfnet/plamo-embedding-1b",
+        model_kwargs=model_kwargs
     )
     
     # 読込した内容を保存
