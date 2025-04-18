@@ -4,6 +4,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["HF_HOME"] = "./pretrained" # 事前学習モデルの保存先指定
 
 import streamlit as st
+import torch
 from markdown import Markdown
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
@@ -35,13 +36,11 @@ def gemini_rag_generator():
     # 直前のユーザの入力を取得
     user_input = st.session_state.messages[-1]["content"]
     
-    # # 会話履歴のデータを作成
-    # history = ""
-    # for message in st.session_state.messages[:-1]:
-    #     history += f"{message['role'].capitalize()}: {message['content']}\n"
-    
     # ベクトル化する準備
-    model_kwargs = {"device": "cuda", "trust_remote_code": True}
+    model_kwargs = {
+        "device": "cuda" if torch.cuda.is_available() else "cpu", 
+        "trust_remote_code": True
+    }
     embedding = HuggingFaceEmbeddings(
         model_name="pfnet/plamo-embedding-1b",
         model_kwargs=model_kwargs

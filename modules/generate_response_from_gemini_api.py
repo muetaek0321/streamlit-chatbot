@@ -20,7 +20,7 @@ def gemini_generator():
         genai.configure(api_key=GEMINI_API_KEY)
         # モデルを準備
         model = genai.GenerativeModel(
-            model_name='gemini-2.0-flash-exp',
+            model_name='gemini-2.5-flash-preview-04-17',
             system_instruction="あなたはエレファントカシマシについて答えるアシスタントです。"
         )
         
