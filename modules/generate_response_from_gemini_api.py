@@ -13,7 +13,9 @@ GEMINI_API_KEY = os.environ["GOOGLE_API_KEY"]
 
 
 # AIの返答を作成
-def gemini_generator():    
+def gemini_generator(
+    user_input: str
+):    
     # 返答を作成
     try:
         # APIキーを設定
@@ -33,7 +35,6 @@ def gemini_generator():
             history.append(message)
         
         # 直前のユーザの入力を取得し、レスポンスを得る
-        user_input = st.session_state.messages[-1]["content"]
         chat = model.start_chat(history=history)
         response = chat.send_message(user_input).text
         
