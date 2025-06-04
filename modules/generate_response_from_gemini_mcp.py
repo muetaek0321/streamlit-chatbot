@@ -1,6 +1,7 @@
 import asyncio
 import time
 import json
+from typing import Generator
 
 from markdown import Markdown
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -21,23 +22,32 @@ TEMPLATE = """
 DB_PATH = "./rag/chroma"
 MCP_CONFIG_PATH = "./data/mcp_config.json"
 
+
+def gemini_mcp_generator(
+    user_input: str
+) -> Generator:
+    """AIが作成した返答をstreamで返す関数
+    """
+    response = asyncio.run(create_gemini_mcp_response(user_input))
+    for word in response.split():
+        yield word + " "
+        time.sleep(0.05)
+
+
 # AIの返答を作成
-async def gemini_mcp_generator(user_input):        
+async def create_gemini_mcp_response(
+    user_input: str
+) -> str:        
     # モデルを準備
     llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
     # プロンプトを設定
     prompt = PromptTemplate.from_template(TEMPLATE)
-
-    # 直前のユーザの入力を取得
-    # user_input = st.session_state.messages[-1]["content"]
     
+    # MCPサーバの設定を読み込み
     with open(MCP_CONFIG_PATH, mode="r") as f:
         mcp_config = json.load(f)
-        
-    # mcp_client = MultiServerMCPClient(mcp_config["mcpServers"])
-    # async with mcp_client.session("fetch") as session:
-    #    tools = await load_mcp_tools(session)
     
+    # ツール化
     mcp_client = MultiServerMCPClient(mcp_config["mcpServers"])
     tools = await mcp_client.get_tools()
     
@@ -47,31 +57,11 @@ async def gemini_mcp_generator(user_input):
     
     # 返答を取得
     response = await executor.ainvoke({"question": user_input})
-
-    # response = await llm.bind_tools(tools).ainvoke(user_input)
-    # if isinstance(response.content, str):
-    #     print("####", response.content)
-    # elif isinstance(response.content, list):
-    #     for content in response.content:
-    #         if content["type"] == "text":
-    #                 print(content["text"])
-
-    # if response.tool_calls:
-    #     for tool_call in response.tool_calls:
-    #         selected_tool = {tool.name.lower(): tool for tool in tools}[
-    #             tool_call["name"].lower()
-    #         ]
-    #         tool_msg = await selected_tool.ainvoke(tool_call)
-    #         print(tool_msg.content)
     
-    print(response["output"])
+    # 返答を成形（makrddown -> HTML）
+    response = Markdown().convert(response["output"])
     
-    # # 返答を成形（makrddown -> HTML）
-    # response = Markdown().convert(response["output"])
-    
-    # for word in response.split():
-    #     yield word + " "
-    #     time.sleep(0.05)
+    return response
     
     
 if __name__ == "__main__":

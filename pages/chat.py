@@ -10,6 +10,7 @@ from modules.st_utils import *
 from modules.number_links import response_add_info
 from modules.generate_response_from_gemini_api import gemini_generator
 from modules.generate_response_from_gemini_rag import gemini_rag_generator
+from modules.generate_response_from_gemini_mcp import gemini_mcp_generator
 
 
 # 定数
@@ -17,7 +18,8 @@ AUTH_DIR_PATH = Path("./user")
 JSON_FILE_NAME = "chat_history.json"
 GENERATOR = {
     "Gemini": gemini_generator, 
-    "Gemini_RAG": gemini_rag_generator
+    "Gemini_RAG": gemini_rag_generator,
+    "Gemini+MCP": gemini_mcp_generator
 }
 
 # スタイルを適用
@@ -66,7 +68,7 @@ with st.sidebar:
     st.divider() # 区切り線
     
     # レスポンスを返す関数を指定するプルダウン
-    st.session_state.respose_mode = st.selectbox("チャットモード選択：", ["Gemini", "Gemini_RAG"])
+    st.session_state.respose_mode = st.selectbox("チャットモード選択：", list(GENERATOR.keys()))
     
     st.divider() # 区切り線
 
@@ -118,7 +120,9 @@ if st.session_state.current_role == "assistant":
         res_container = st.empty()
         
         # 選択中のチャットモードによって返答するresponse_generatorを切り替え
-        for res in GENERATOR[st.session_state.respose_mode]():
+        response_text = GENERATOR[st.session_state.respose_mode](prompt)
+        
+        for res in response_text:
             response += res
             res_container.markdown(response, unsafe_allow_html=True)
             

@@ -25,7 +25,9 @@ TEMPLATE = """
 DB_PATH = "./rag/chroma"
 
 # AIの返答を作成
-def gemini_rag_generator():        
+def gemini_rag_generator(
+    user_input: str
+):        
     # モデルを準備
     llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash-thinking-exp")
     # プロンプトを設定
