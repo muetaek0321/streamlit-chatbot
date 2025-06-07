@@ -7,7 +7,6 @@ from markdown import Markdown
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain_mcp_adapters.client import MultiServerMCPClient
-from langchain_mcp_adapters.tools import load_mcp_tools
 from langchain.agents import create_tool_calling_agent, AgentExecutor
 
 
@@ -19,7 +18,6 @@ TEMPLATE = """
 質問: {question}
 答え: {agent_scratchpad}
 """
-DB_PATH = "./rag/chroma"
 MCP_CONFIG_PATH = "./data/mcp_config.json"
 
 
@@ -63,13 +61,3 @@ async def create_gemini_mcp_response(
     
     return response
     
-    
-if __name__ == "__main__":
-    # 単体テスト
-    MCP_CONFIG_PATH = "../data/mcp_config.json"
-    
-    # user_input = "エレファントカシマシについて教えてください"
-    user_input = "https://www.elephantkashimashi.com/を参照して最新情報を取得してください。"
-    # user_input = input("質問を入力 >>> ")
-    
-    asyncio.run(gemini_mcp_generator(user_input))
